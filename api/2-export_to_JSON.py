@@ -1,3 +1,10 @@
+#!/usr/bin/python3
+"""
+This Python script retrieves and displays the TODO list progress of a given
+employee based on their employee ID using a REST API. The script uses the requests
+module to fetch data and displays the progress in a specified format.
+"""
+
 import requests
 import sys
 import csv
