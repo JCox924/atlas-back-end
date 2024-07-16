@@ -5,8 +5,8 @@ employee based on their employee ID using a REST API. The script uses the reques
 module to fetch data and displays the progress in a specified format.
 """
 
-import requests
 import json
+import requests
 
 def fetch_all_employees_todo():
     # Base URLs for the API
