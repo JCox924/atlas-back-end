@@ -1,52 +1,40 @@
 #!/usr/bin/python3
 """
-This Python script retrieves and displays the TODO list progress of a given
-employee based on their employee ID using a REST API. The script uses the requests
-module to fetch data and displays the progress in a specified format.
+Using what you did in task 0,
+extend your Python script to export data in the JSON format
 """
-
 import json
 import requests
 
-def fetch_all_employees_todo():
-    # Base URLs for the API
-    users_url = "https://jsonplaceholder.typicode.com/users"
-    todos_url = "https://jsonplaceholder.typicode.com/todos"
 
-    try:
-        # Fetch all employees information
-        users_response = requests.get(users_url)
-        users_response.raise_for_status()
-        users_data = users_response.json()
+def export_all_prog_to_json():
+    url = "https://jsonplaceholder.typicode.com"
+    user_url = f"{url}/users"
+    todo_url = f"{url}/todos"
 
-        # Fetch all TODO lists
-        todos_response = requests.get(todos_url)
-        todos_response.raise_for_status()
-        todos_data = todos_response.json()
+    user_data = requests.get(user_url).json()
+    user_todo_dict = {}
 
-        # Create a dictionary to hold the JSON data
-        json_data = {}
+    for user in user_data:
+        user_id = user["id"]
+        user_name = user["username"]
 
-        for user in users_data:
-            user_id = user.get("id")
-            username = user.get("name")
-            user_todos = [task for task in todos_data if task.get("userId") == user_id]
+        todo_data = requests.get(todo_url, params={"userId": user_id}).json()
 
-            json_data[str(user_id)] = [
-                {"username": username, "task": task.get("title"), "completed": task.get("completed")}
-                for task in user_todos
-            ]
+        user_todo_list = []
+        for task in todo_data:
+            task_dict = {
+                "task": task["title"],
+                "completed": task["completed"],
+                "username": user_name
+            }
+            user_todo_list.append(task_dict)
 
-        # Export data to JSON
-        json_filename = "todo_all_employees.json"
-        with open(json_filename, mode='w') as file:
-            json.dump(json_data, file, indent=4)
+        user_todo_dict[f"{user_id}"] = user_todo_list
 
-        print(f"Data exported to {json_filename}")
-
-    except requests.RequestException as e:
-        print(f"An error occurred: {e}")
+    with open("todo_all_employees.json", "w") as f:
+        json.dump(user_todo_dict, f, indent=4)
 
 
 if __name__ == "__main__":
-    fetch_all_employees_todo()
+    export_all_prog_to_json()
