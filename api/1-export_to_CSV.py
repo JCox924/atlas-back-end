@@ -1,4 +1,3 @@
-
 #!/usr/bin/python3
 """Script that exports tasks owned by an employee to a CSV file"""
 import csv
